@@ -1,5 +1,12 @@
 import WeatherInfo from "@/components/WeatherInfo";
+import YtPlayer from "@/components/YtPlayer";
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
+
+const DynamicComponentWithNoSSR = dynamic(
+  () => import("@/components/YtPlayer"),
+  { ssr: false }
+);
 
 export default async function Page({
   searchParams,
@@ -11,6 +18,9 @@ export default async function Page({
       <Suspense fallback={<div>!!!</div>}>
         <WeatherInfo searchParams={searchParams}></WeatherInfo>
       </Suspense>
+
+      {/* <DynamicComponentWithNoSSR></DynamicComponentWithNoSSR> */}
+      <YtPlayer></YtPlayer>
     </div>
   );
 }
