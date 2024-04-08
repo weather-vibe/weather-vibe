@@ -16,7 +16,7 @@ export default async function WeatherInfo({
   const visibility = metersToKilometers(currentWeather.visibility);
   const weather = currentWeather.weather[0];
   return (
-    <div>
+    <div className="z-50 absolute">
       {temp}°C {weather.description}
       <Image
         alt="weather-icon"

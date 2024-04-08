@@ -5,6 +5,10 @@ module.exports = {
         protocol: "https",
         hostname: "openweathermap.org",
       },
+      {
+        protocol: "https",
+        hostname: "i.gifer.com",
+      },
     ],
   },
 };

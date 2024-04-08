@@ -58,7 +58,7 @@ export default function SearchBar({}: Props) {
   };
 
   return (
-    <div className="relative">
+    <div className="absolute z-50 right-0">
       <input
         type="text"
         placeholder="search location.."
