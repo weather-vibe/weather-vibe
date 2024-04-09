@@ -12,6 +12,7 @@ export default function YtPlayer() {
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName("script")[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
     var player;
     window.onYouTubeIframeAPIReady = function () {
       player = new YT.Player("ytplayer", {
@@ -39,6 +40,8 @@ export default function YtPlayer() {
         player?.pauseVideo();
       }
     });
+
+    player.cuePlaylist(["4xDzrJKXOOY", "rt1mRnRp79A", "0Fjjjdm2c2g"]);
   };
 
   return (

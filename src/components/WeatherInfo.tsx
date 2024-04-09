@@ -12,7 +12,7 @@ export default async function WeatherInfo({
   const lon = searchParams?.lon;
   const city = searchParams?.city;
   const currentWeather = await fetchCurrentWeather(lat, lon);
-  const temp = convertKelvinToCelsius(currentWeather.main.temp);
+  const temp = convertKelvinToCelsius(currentWeather?.main.temp);
   const visibility = metersToKilometers(currentWeather.visibility);
   const weather = currentWeather.weather[0];
   return (
