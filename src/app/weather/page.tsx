@@ -1,7 +1,7 @@
-import WeatherInfo from "@/components/WeatherInfo";
-import YtPlayer from "@/components/YtPlayer";
-import Image from "next/image";
 import { Suspense } from "react";
+import WeatherInfo from "../../components/WeatherInfo";
+import Image from "next/image";
+import YtPlayer from "../../components/YtPlayer";
 
 export default async function Page({
   searchParams,

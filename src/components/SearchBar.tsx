@@ -1,5 +1,5 @@
 "use client";
-import { fetchCityList, fetchCurrentWeather } from "@/app/lib/data";
+import { fetchCityList, fetchCurrentWeather } from "@/app/lib/weatherData";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import Suggestion from "./Suggestion";
