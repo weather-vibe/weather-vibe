@@ -9,11 +9,15 @@ export default function YtPlayer() {
   const [videoTitle, setVideoTitle] = useState("");
   const [currentWeather] = useAtom(weatherDescriptionAtom);
   let playList = defaultList.map((item) => item.videoId);
+  var player;
 
-  const pickPlaylist = () => {
+  const pickPlaylist = (currentWeather) => {
+    console.log("vvv", currentWeather.weather[0].description);
     switch (currentWeather.weather[0].description) {
-      case "clear sky":
+      case "scattered clouds":
         playList = sunnyList.map((item) => item.videoId);
+        console.log("playlist", playList);
+        player.stopVideo();
         break;
 
       default:
@@ -21,10 +25,14 @@ export default function YtPlayer() {
     }
   };
   useEffect(() => {
-    console.log("vvv", currentWeather);
-    pickPlaylist();
     loadYT();
   }, []);
+
+  useEffect(() => {
+    if (player) {
+      pickPlaylist(currentWeather);
+    }
+  }, [currentWeather]);
 
   const loadYT = () => {
     // Load the IFrame Player API code asynchronously.
@@ -33,8 +41,8 @@ export default function YtPlayer() {
     var firstScriptTag = document.getElementsByTagName("script")[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    var player;
     window.onYouTubeIframeAPIReady = function () {
+      console.log("neww");
       player = new YT.Player("ytplayer", {
         height: "360",
         width: "640",
@@ -76,6 +84,8 @@ export default function YtPlayer() {
         const currentIndex = player.getPlaylistIndex();
         const title = getTitleByVideoIndex(defaultList, currentIndex);
         setVideoTitle(title);
+      }
+      if (event.data === YT.PlayerState.ENDED) {
       }
     }
   };

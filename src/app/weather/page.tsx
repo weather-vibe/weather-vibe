@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import WeatherInfo from "../../components/WeatherInfo";
 import Image from "next/image";
 import YtPlayer from "../../components/YtPlayer";
+import { useAtom } from "jotai";
+import { weatherDescriptionAtom } from "../atom";
 
 export default async function Page({
   searchParams,
