@@ -9,6 +9,10 @@ module.exports = {
         protocol: "https",
         hostname: "i.gifer.com",
       },
+      {
+        protocol: "https",
+        hostname: "staging.cohostcdn.org",
+      },
     ],
   },
 };

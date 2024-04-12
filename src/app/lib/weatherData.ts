@@ -14,7 +14,7 @@ export async function fetchCurrentWeather(
   noStore();
   try {
     const currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`;
-    // await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const { data } = await axios.get(currentWeatherApi);
     return data;
   } catch (error) {
