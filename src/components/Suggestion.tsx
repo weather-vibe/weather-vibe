@@ -6,7 +6,7 @@ export default function Suggestion({
   onCityClick: (lat: number, lon: number, location: string) => void;
 }) {
   return listData === null ? null : listData.length > 0 ? (
-    <ul className="bg-white rounded p-3 z-60 ">
+    <ul className="bg-white absolute rounded p-3 z-60">
       {listData.map((city, index) => (
         <li
           key={index}

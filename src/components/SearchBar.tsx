@@ -4,7 +4,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import Suggestion from "./Suggestion";
 import { Suspense, useState } from "react";
-import { IoLocationOutline } from "react-icons/io5";
 
 type Props = {};
 type CityArray = any[] | null;
@@ -20,6 +19,7 @@ export default function SearchBar({}: Props) {
     if (location) {
       const list = await fetchCityList(location);
       setCityList(list);
+      console.log("cityList", list);
     } else {
       setCityList(null);
     }
@@ -58,23 +58,25 @@ export default function SearchBar({}: Props) {
   };
 
   return (
-    <div className="absolute z-50 right-10 ">
-      <div className="flex items-center">
-        <input
-          type="text"
-          placeholder="search location.."
-          className="px-3 py-2 border border-pink-400 rounded-md focus:outline-none focus:border-green-300"
-          onChange={(e) => {
-            handleInputChange(e.target.value);
-          }}
-          value={location}
-        ></input>
-
-        <div onClick={getCurrentLocation} className="cursor-pointer">
-          <IoLocationOutline />
-        </div>
-      </div>
-      <Suggestion listData={cityList} onCityClick={onCityClick}></Suggestion>
+    <div className="absolute z-50 right-0">
+      <input
+        type="text"
+        placeholder="search location.."
+        className="px-3 py-2 border border-pink-400 rounded-md focus:outline-none focus:border-green-300"
+        onChange={(e) => {
+          handleInputChange(e.target.value);
+        }}
+        value={location}
+      ></input>
+      <button
+        className="px-3 py-3 bg-purple-200 text-white rounded-full hover:bg-slate-300"
+        onClick={getCurrentLocation}
+      >
+        o
+      </button>
+      <Suspense fallback={<div>searching...</div>}>
+        <Suggestion listData={cityList} onCityClick={onCityClick}></Suggestion>
+      </Suspense>
     </div>
   );
 }
