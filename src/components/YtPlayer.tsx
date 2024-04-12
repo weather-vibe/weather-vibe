@@ -6,7 +6,11 @@ import getTitleByVideoIndex from '../app/utils/getTitleByIndex';
 import { useAtom } from 'jotai';
 import { weatherDescriptionAtom } from '../app/atom';
 
-export default function YtPlayer() {
+export default function YtPlayer({
+  backgroundImage,
+  onPreviousImage,
+  onNextImage,
+}) {
   const [videoTitle, setVideoTitle] = useState('');
   const [currentWeather] = useAtom(weatherDescriptionAtom);
   let playList = defaultList.map((item) => item.videoId);
@@ -61,7 +65,7 @@ export default function YtPlayer() {
       if (event.code === 'KeyZ') {
         player?.playVideo();
       }
-      if (event.code === 'KeyX') {
+      if (event?.code === 'KeyX') {
         player?.pauseVideo();
       }
       if (event.code === 'ArrowRight') {
@@ -105,6 +109,7 @@ export default function YtPlayer() {
       }
     });
   };
+
   return (
     <div className="pointer-events-none">
       <div id="ytplayer"></div>
@@ -115,6 +120,8 @@ export default function YtPlayer() {
       <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-black-600">
         Press ArrowUp to increase volume and ArrowDown to decrease
       </p>
+      <button onClick={onPreviousImage}>Previous Image</button>
+      <button onClick={onNextImage}>Next Image</button>
     </div>
   );
 }
