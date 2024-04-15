@@ -1,6 +1,6 @@
-'use client';
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
+import { useAtom } from 'jotai';
 import {
   defaultList,
   sunnyList,
@@ -10,88 +10,82 @@ import {
 } from '../app/lib/playList';
 import getTitleByVideoIndex from '../app/utils/getTitleByIndex';
 import Image from 'next/image';
+import { weatherDescriptionAtom } from '../app/atom';
 
-export default function YtPlayer() {
+export default function YtPlayer({
+  backgroundImage,
+  onPreviousImage,
+  onNextImage,
+}) {
   const [videoTitle, setVideoTitle] = useState('');
   const [currentPlayList, setCurrentPlayList] = useState(defaultList);
   const [ytPlayer, setYtPlayer] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [issPlayListChanged, setIsPlayListChanged] = useState(0);
-  const [isPlaying, segIsPlaying] = useState(false);
-
-  let playList = defaultList.map((item) => item.videoId);
-  let player;
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentWeather] = useAtom(weatherDescriptionAtom);
 
   useEffect(() => {
+    pickPlaylist();
     loadYT();
   }, []);
 
-  const pickPlayList = (value) => {
-    if (value === 'rain') {
-      ytPlayer?.cuePlaylist(rainyList.map((item) => item.videoId));
-      setCurrentPlayList(rainyList);
-    } else if (value === 'storm') {
-      ytPlayer?.cuePlaylist(sunnyList.map((item) => item.videoId));
-      setCurrentPlayList(sunnyList);
-    } else if (value === 'snow') {
-      ytPlayer?.cuePlaylist(winterSnowList.map((item) => item.videoId));
-      setCurrentPlayList(winterSnowList);
-    } else if (value === 'clear') {
-      ytPlayer?.cuePlaylist(defaultList.map((item) => item.videoId));
-      setCurrentPlayList(defaultList);
-    } else if (value === 'njwmxList') {
-      ytPlayer?.cuePlaylist(njwmxList.map((item) => item.videoId));
-      setCurrentPlayList(njwmxList);
+  const pickPlaylist = () => {
+    if (currentWeather.weather && currentWeather.weather.length > 0) {
+      switch (currentWeather.weather[0].description) {
+        case 'clear sky':
+          setCurrentPlayList(sunnyList);
+          break;
+        case 'rain':
+          setCurrentPlayList(rainyList);
+          break;
+        case 'snow':
+          setCurrentPlayList(winterSnowList);
+          break;
+        case 'storm':
+          setCurrentPlayList(sunnyList);
+          break;
+        default:
+          setCurrentPlayList(defaultList);
+          break;
+      }
+    } else {
     }
-
-    setVideoTitle('');
-    segIsPlaying(false);
   };
 
   const loadYT = () => {
-    // Load the IFrame Player API code asynchronously.
-    var tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    if (typeof document !== 'undefined') {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    window.onYouTubeIframeAPIReady = function () {
-      player = new YT.Player('ytplayer', {
-        height: '360',
-        width: '640',
-        playerVars: {
-          controls: 0,
-          enablejsapi: 1,
-          autoplay: 1,
-          loop: 1,
-        },
-        events: {
-          onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange,
-        },
-      });
-      setYtPlayer(player);
-    };
+      window.onYouTubeIframeAPIReady = function () {
+        const player = new YT.Player('ytplayer', {
+          height: '360',
+          width: '640',
+          playerVars: {
+            controls: 0,
+            enablejsapi: 1,
+            autoplay: 1,
+            loop: 1,
+          },
+          events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+          },
+        });
+        setYtPlayer(player);
+      };
+    }
   };
 
-  function onPlayerReady(event) {
-    console.log('ready');
-    document.addEventListener('keydown', function (event) {
-      console.log(event.code);
-      if (event.code == 'ArrowRight') {
-        player?.nextVideo();
-      }
-      if (event.code == 'ArrowLeft') {
-        player?.previousVideo();
-      }
-      if (event.code == 'ArrowDown') {
-        player?.stopVideo();
-        player?.cuePlaylist(sunnyList.map((item) => item.videoId));
-      }
-    });
+  const onPlayerReady = (event) => {
     event.target.playVideo();
-    player?.cuePlaylist(playList);
-  }
+    if (ytPlayer) {
+      ytPlayer.cuePlaylist(defaultList.map((item) => item.videoId));
+    }
+  };
 
   function onPlayerStateChange(event) {
     console.log('changed');
@@ -102,39 +96,93 @@ export default function YtPlayer() {
     }
   }
 
-  useEffect(() => {
-    changeTitle();
-  }, [issPlayListChanged]);
+  const pickPlayList = (value) => {
+    let selectedList;
+    switch (value) {
+      case 'rain':
+        selectedList = rainyList;
+        break;
+      case 'storm':
+        selectedList = sunnyList;
+        break;
+      case 'snow':
+        selectedList = winterSnowList;
+        break;
+      case 'clear':
+        selectedList = defaultList;
+        break;
+      case 'njwmxList':
+        selectedList = njwmxList;
+        break;
+      default:
+        selectedList = defaultList;
+        break;
+    }
 
-  const changeTitle = () => {
-    const title = getTitleByVideoIndex(currentPlayList, currentIndex);
-    setVideoTitle(title);
+    if (ytPlayer && selectedList) {
+      ytPlayer.cuePlaylist(selectedList.map((item) => item.videoId));
+      setCurrentPlayList(selectedList);
+    }
+    const changeVolume = (volume) => {
+      if (player) {
+        player.setVolume(volume);
+        updateVolumeBar();
+      }
+    };
+
+    const updateVolumeBar = () => {
+      const volumeBar = document.getElementById('volume-bar');
+      if (volumeBar) {
+        volumeBar.style.width = `${player.getVolume()}%`;
+      }
+    };
+
+    setVideoTitle('');
+    setIsPlaying(false);
+    document.addEventListener('keydown', function (event) {
+      if (event.code === 'ArrowUp') {
+        player?.setVolume(player.getVolume() + 10);
+        changeVolume(player?.getVolume() + 10);
+      }
+      if (event.code === 'ArrowDown') {
+        player?.setVolume(player.getVolume() - 10);
+        changeVolume(player?.getVolume() - 10);
+      }
+    });
   };
 
   return (
     <>
-      <div className="pointer-events-none ">
+      <div className="pointer-events-none">
         <div id="ytplayer"></div>
         <p className="absolute z-60 bottom-40">{videoTitle}</p>
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-300 h-2 w-48">
+          <div id="volume-bar" className="bg-blue-500 h-full"></div>
+        </div>
+        <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-black-600">
+          Press ArrowUp to increase volume and ArrowDown to decrease
+        </p>
+        <button onClick={onPreviousImage}>Previous Image</button>
+        <button onClick={onNextImage}>Next Image</button>
       </div>
       <div className="absolute z-60 bottom-10">
         <button
-          className="bg-pink-200 "
+          className="bg-pink-200"
           onClick={() => {
             ytPlayer?.playVideo();
-            segIsPlaying(true);
+            setIsPlaying(true);
           }}
         >
-          play
+          Play
         </button>
         <button
           className="bg-slate-300"
           onClick={() => {
             ytPlayer?.pauseVideo();
-            segIsPlaying(false);
+            setIsPlaying(false);
           }}
         >
-          pause
+          Pause
         </button>
         <select onChange={(e) => pickPlayList(e.target.value)}>
           <option value="rain">⛆</option>
@@ -148,8 +196,8 @@ export default function YtPlayer() {
           alt="cd"
           width={50}
           height={50}
-          className={clsx({ 'animate-spin': isPlaying === true })}
-        ></Image>
+          className={clsx({ 'animate-spin': isPlaying })}
+        />
       </div>
     </>
   );

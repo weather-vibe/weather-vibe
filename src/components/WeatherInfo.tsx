@@ -25,7 +25,6 @@ export default function WeatherInfo({
   }, [lat, lon, setCurrentWeather]);
 
   if (!currentWeather) {
-    // 데이터가 로드되기 전에는 로딩 표시 또는 다른 처리를 할 수 있습니다.
     return <div>Loading...</div>;
   }
 

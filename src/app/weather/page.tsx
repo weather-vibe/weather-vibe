@@ -67,15 +67,14 @@ export default function Page({
         <WeatherInfo searchParams={searchParams}></WeatherInfo>
       </Suspense>
       <Image
-        alt="background"
+        alt="zzz"
         src={backgroundImage}
-        layout="fill"
-        objectFit="cover"
-        objectPosition="center"
-        className="z-0"
+        width={0}
+        height={0}
+        sizes="100vw"
+        className="w-full h-screen absolute top-0 right-0 z-0"
       />
       <YtPlayer backgroundImage={backgroundImage}></YtPlayer>
-      <p className="z-50 absolute">press z to play, x to pause</p>
     </div>
   );
 }
