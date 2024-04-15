@@ -1,6 +1,5 @@
 import { fetchCurrentWeather } from "@/app/lib/weatherData";
 import convertKelvinToCelsius from "@/app/utils/convertKelvinToCelsius";
-import metersToKilometers from "@/app/utils/convertMetersToKilometers";
 import Image from "next/image";
 
 export default async function WeatherInfo({

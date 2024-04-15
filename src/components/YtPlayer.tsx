@@ -11,6 +11,18 @@ import {
 import getTitleByVideoIndex from "../app/utils/getTitleByIndex";
 import Image from "next/image";
 
+const images = [
+  "https://i.gifer.com/6vIk.gif",
+  "https://i.gifer.com/xK.gif",
+  "https://i.gifer.com/YQgT.gif",
+  "https://i.gifer.com/PPy.gif",
+  "https://i.gifer.com/GVue.gif",
+  "https://i.gifer.com/2swA.gif",
+  "https://i.gifer.com/Mf08.gif",
+  "https://i.gifer.com/Xgd3.gif",
+  "https://i.gifer.com/6OmH.gif",
+];
+
 export default function YtPlayer() {
   const [videoTitle, setVideoTitle] = useState("");
   const [currentPlayList, setCurrentPlayList] = useState(defaultList);
@@ -18,6 +30,43 @@ export default function YtPlayer() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [issPlayListChanged, setIsPlayListChanged] = useState(0);
   const [isPlaying, segIsPlaying] = useState(false);
+  const [backgroundImage, setBackgroundImage] = useState(images[0]);
+  const [previousImageIndex, setPreviousImageIndex] = useState(0);
+  const [consecutiveSameImageCount, setConsecutiveSameImageCount] = useState(0);
+
+  const getRandomImage = () => {
+    let randomIndex = Math.floor(Math.random() * images.length);
+    while (
+      randomIndex === previousImageIndex &&
+      consecutiveSameImageCount >= 1
+    ) {
+      randomIndex = Math.floor(Math.random() * images.length);
+    }
+    return randomIndex;
+  };
+  const handleRandomImage = () => {
+    let randomIndex = getRandomImage();
+    if (randomIndex === previousImageIndex) {
+      setConsecutiveSameImageCount((count) => count + 1);
+    } else {
+      setConsecutiveSameImageCount(0);
+    }
+    setBackgroundImage(images[randomIndex]);
+    setPreviousImageIndex(randomIndex);
+  };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "ArrowLeft" || event.code === "ArrowRight") {
+        handleRandomImage();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   let playList = defaultList.map((item) => item.videoId);
   let player;
@@ -46,6 +95,19 @@ export default function YtPlayer() {
 
     setVideoTitle("");
     segIsPlaying(false);
+  };
+
+  const changeVolume = (volume) => {
+    if (player) {
+      player.setVolume(volume);
+      updateVolumeBar();
+    }
+  };
+  const updateVolumeBar = () => {
+    const volumeBar = document.getElementById("volume-bar");
+    if (volumeBar) {
+      volumeBar.style.width = `${player.getVolume()}%`;
+    }
   };
 
   const loadYT = () => {
@@ -84,9 +146,14 @@ export default function YtPlayer() {
       if (event.code == "ArrowLeft") {
         player?.previousVideo();
       }
-      if (event.code == "ArrowDown") {
-        player?.stopVideo();
-        player?.cuePlaylist(sunnyList.map((item) => item.videoId));
+
+      if (event.code === "ArrowUp") {
+        // player?.setVolume(player.getVolume() + 10);
+        changeVolume(player?.getVolume() + 10);
+      }
+      if (event.code === "ArrowDown") {
+        // player?.setVolume(player.getVolume() - 10);
+        changeVolume(player?.getVolume() - 10);
       }
     });
     event.target.playVideo();
@@ -115,9 +182,10 @@ export default function YtPlayer() {
     <>
       <div className="pointer-events-none ">
         <div id="ytplayer"></div>
-        <p className="absolute z-60 bottom-40">{videoTitle}</p>
       </div>
-      <div className="absolute z-60 bottom-10">
+
+      <div className="absolute z-60" style={{ zIndex: 10 }}>
+        <p>{videoTitle}</p>
         <button
           className="bg-pink-200 "
           onClick={() => {
@@ -143,6 +211,7 @@ export default function YtPlayer() {
           <option value="clear">🌞</option>
           <option value="njwmxList">🐰</option>
         </select>
+
         <Image
           src="https://staging.cohostcdn.org/attachment/8acfdaa0-1dbe-49e6-8ba5-4a59c429fd17/PROGMAN.exe%20CD.png"
           alt="cd"
@@ -150,7 +219,21 @@ export default function YtPlayer() {
           height={50}
           className={clsx({ "animate-spin": isPlaying === true })}
         ></Image>
+        <div className=" bg-gray-300 h-2 w-48">
+          <div id="volume-bar" className="bg-blue-500 h-full"></div>
+        </div>
+        <p className=" text-sm text-black-600">
+          Press ArrowUp to increase volume and ArrowDown to decrease
+        </p>
       </div>
+      <Image
+        alt="zzz"
+        src={backgroundImage}
+        width={0}
+        height={0}
+        sizes="100vw"
+        className="w-full h-screen absolute top-0 right-0"
+      ></Image>
     </>
   );
 }

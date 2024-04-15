@@ -1,9 +1,8 @@
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import WeatherInfo from "../../components/WeatherInfo";
-import Image from "next/image";
 import YtPlayer from "../../components/YtPlayer";
 
-export default async function Page({
+export default function Page({
   searchParams,
 }: {
   searchParams?: { lat?: string; lon?: string; city?: string };
@@ -13,15 +12,7 @@ export default async function Page({
       <Suspense fallback={<div>!!!</div>}>
         <WeatherInfo searchParams={searchParams}></WeatherInfo>
       </Suspense>
-      <Image
-        alt="zzz"
-        src="https://i.gifer.com/6OmH.gif"
-        width={0}
-        height={0}
-        sizes="100vw"
-        className="w-full h-screen absolute top-0 right-0 z-0"
-      ></Image>
-      <YtPlayer searchParams={searchParams}></YtPlayer>
+      <YtPlayer></YtPlayer>
     </div>
   );
 }
