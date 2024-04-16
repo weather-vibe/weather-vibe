@@ -194,7 +194,7 @@ export default function YtPlayer() {
         <span className="flex items-center">
           <select
             onChange={(e) => pickPlayList(e.target.value)}
-            className="appearance-none bg-transparent border-none w-12 text-xl outline-none"
+            className="appearance-none bg-transparent border-none w-12 text-xl outline-none ml-2"
             style={{
               WebkitAppearance: 'none',
               MozAppearance: 'none',
@@ -212,13 +212,11 @@ export default function YtPlayer() {
             alt="cd"
             width={50}
             height={50}
-            className={`@tailwind animate-spin -ml-9 ${
-              isPlaying ? 'animate-spin' : ''
-            }`}
+            className={clsx('-ml-9', { 'animate-spin': isPlaying === true })}
           ></Image>
         </span>
         <button
-          className={''}
+          className="ml-2"
           onClick={() => {
             ytPlayer?.playVideo();
             segIsPlaying(true);
