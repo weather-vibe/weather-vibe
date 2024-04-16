@@ -1,11 +1,11 @@
-import { Suspense } from "react";
-import WeatherInfo from "../../components/WeatherInfo";
-import YtPlayer from "../../components/YtPlayer";
+import { Suspense } from 'react';
+import WeatherInfo from '../../components/WeatherInfo';
+import YtPlayer from '../../components/YtPlayer';
 
 export default function Page({
   searchParams,
 }: {
-  searchParams?: { lat?: string; lon?: string; city?: string };
+  searchParams?: { lat?: string; lon?: string };
 }) {
   return (
     <div>
