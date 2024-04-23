@@ -1,39 +1,35 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import clsx from 'clsx';
-import {
-  defaultList,
-  sunnyList,
-  rainyList,
-  winterSnowList,
-  njwmxList,
-} from '../app/lib/playList';
-import getTitleByVideoIndex from '../app/utils/getTitleByIndex';
-import Image from 'next/image';
-import book from '../img/book.png';
-import EN from '../img/영어.png';
-import KO from '../img/한글.png';
-import KOREA from '../img/한국.png';
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
+"use client";
+import React, { useEffect, useState } from "react";
+import clsx from "clsx";
+import { playListAll, playOption } from "../app/lib/playList";
+import getTitleByVideoIndex from "../app/utils/getTitleByIndex";
+import Image from "next/image";
+import book from "../img/book.png";
+import EN from "../img/영어.png";
+import KO from "../img/한글.png";
+import KOREA from "../img/한국.png";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 
 const images = [
-  'https://i.gifer.com/6vIk.gif',
-  'https://i.gifer.com/xK.gif',
-  'https://i.gifer.com/YQgT.gif',
-  'https://i.gifer.com/PPy.gif',
-  'https://i.gifer.com/GVue.gif',
-  'https://i.gifer.com/2swA.gif',
-  'https://i.gifer.com/Mf08.gif',
-  'https://i.gifer.com/Xgd3.gif',
-  'https://i.gifer.com/6OmH.gif',
+  "https://i.gifer.com/6vIk.gif",
+  "https://i.gifer.com/xK.gif",
+  "https://i.gifer.com/YQgT.gif",
+  "https://i.gifer.com/PPy.gif",
+  "https://i.gifer.com/GVue.gif",
+  "https://i.gifer.com/2swA.gif",
+  "https://i.gifer.com/Mf08.gif",
+  "https://i.gifer.com/Xgd3.gif",
+  "https://i.gifer.com/6OmH.gif",
 ];
 
 const MySwal = withReactContent(Swal);
 
 export default function YtPlayer() {
-  const [videoTitle, setVideoTitle] = useState('');
-  const [currentPlayList, setCurrentPlayList] = useState(defaultList);
+  const [videoTitle, setVideoTitle] = useState("");
+  const [currentPlayList, setCurrentPlayList] = useState(
+    playListAll.defaultList
+  );
   const [ytPlayer, setYtPlayer] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [issPlayListChanged, setIsPlayListChanged] = useState(0);
@@ -43,19 +39,21 @@ export default function YtPlayer() {
   const [consecutiveSameImageCount, setConsecutiveSameImageCount] = useState(0);
   const [isBookClicked, setIsBookClicked] = useState(false);
   const [isKoreanImageClicked, setIsKoreanImageClicked] = useState(false);
+  const [currentIcon, setCurrentIcon] = useState("💗");
+  const [showIconOption, setShowIconOption] = useState(false);
   useEffect(() => {
     showNotification();
   }, []);
 
   const showNotification = () => {
     Swal.fire({
-      text: 'Hey If you are new to Elementalsky, why not give the heart a click? 😊',
+      text: "Hey If you are new to Elementalsky, why not give the heart a click? 😊",
       timer: 3000,
       timerProgressBar: true,
       toast: true,
 
       showConfirmButton: false,
-      background: '#C5BFB1',
+      background: "#C5BFB1",
     });
   };
 
@@ -83,45 +81,33 @@ export default function YtPlayer() {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
+      if (event.code === "ArrowLeft" || event.code === "ArrowRight") {
         handleRandomImage();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
-  let playList = defaultList.map((item) => item.videoId);
+  let playList = playListAll.defaultList.map((item) => item.videoId);
   let player;
 
   useEffect(() => {
     loadYT();
   }, []);
 
-  const pickPlayList = (value) => {
-    if (value === 'rain') {
-      ytPlayer?.cuePlaylist(rainyList.map((item) => item.videoId));
-      setCurrentPlayList(rainyList);
-    } else if (value === 'storm') {
-      ytPlayer?.cuePlaylist(sunnyList.map((item) => item.videoId));
-      setCurrentPlayList(sunnyList);
-    } else if (value === 'snow') {
-      ytPlayer?.cuePlaylist(winterSnowList.map((item) => item.videoId));
-      setCurrentPlayList(winterSnowList);
-    } else if (value === 'clear') {
-      ytPlayer?.cuePlaylist(defaultList.map((item) => item.videoId));
-      setCurrentPlayList(defaultList);
-    } else if (value === 'njwmxList') {
-      ytPlayer?.cuePlaylist(njwmxList.map((item) => item.videoId));
-      setCurrentPlayList(njwmxList);
-    }
+  const pickPlayList = (value, icon) => {
+    ytPlayer?.cuePlaylist(playListAll[value].map((item) => item.videoId));
+    setCurrentPlayList(playListAll[value]);
 
-    setVideoTitle('');
+    setVideoTitle("");
     setIsPlaying(false);
+    setCurrentIcon(icon);
+    setShowIconOption(false);
   };
 
   const changeVolume = (volume) => {
@@ -132,22 +118,22 @@ export default function YtPlayer() {
   };
 
   const updateVolumeBar = () => {
-    const volumeBar = document.getElementById('volume-bar');
+    const volumeBar = document.getElementById("volume-bar");
     if (volumeBar) {
       volumeBar.style.width = `${player.getVolume()}%`;
     }
   };
 
   const loadYT = () => {
-    var tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    var firstScriptTag = document.getElementsByTagName('script')[0];
+    var tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName("script")[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     window.onYouTubeIframeAPIReady = function () {
-      player = new YT.Player('ytplayer', {
-        height: '360',
-        width: '640',
+      player = new YT.Player("ytplayer", {
+        height: "360",
+        width: "640",
         playerVars: {
           controls: 0,
           enablejsapi: 1,
@@ -164,18 +150,18 @@ export default function YtPlayer() {
   };
 
   function onPlayerReady(event) {
-    document.addEventListener('keydown', function (event) {
-      if (event.code == 'ArrowRight') {
+    document.addEventListener("keydown", function (event) {
+      if (event.code == "ArrowRight") {
         player?.nextVideo();
       }
-      if (event.code == 'ArrowLeft') {
+      if (event.code == "ArrowLeft") {
         player?.previousVideo();
       }
 
-      if (event.code === 'ArrowUp') {
+      if (event.code === "ArrowUp") {
         changeVolume(player?.getVolume() + 10);
       }
-      if (event.code === 'ArrowDown') {
+      if (event.code === "ArrowDown") {
         changeVolume(player?.getVolume() - 10);
       }
     });
@@ -217,40 +203,44 @@ export default function YtPlayer() {
       <div className="pointer-events-none ">
         <div id="ytplayer"></div>
       </div>
-      <div
-        className="absolute z-60 bottom-20 left-0 "
-        style={{ zIndex: 10 }}
-      ></div>
-      <div
-        className="absolute z-60 bottom-0 left-0 mb-5"
-        style={{ zIndex: 10 }}
-      >
-        <span className="flex items-center">
-          <select
-            onChange={(e) => pickPlayList(e.target.value)}
-            className="appearance-none bg-transparent border-none w-12 text-xl outline-none ml-2"
-            style={{
-              WebkitAppearance: 'none',
-              MozAppearance: 'none',
-              appearance: 'none',
-            }}
+      <div className="absolute z-50 bottom-0 left-0 mb-5 flex items-center">
+        <Image
+          src="https://staging.cohostcdn.org/attachment/8acfdaa0-1dbe-49e6-8ba5-4a59c429fd17/PROGMAN.exe%20CD.png"
+          alt="cd"
+          width={50}
+          height={50}
+          className={clsx("-mr-2", { "animate-spin": isPlaying === true })}
+        ></Image>
+        <div className="relative">
+          <div
+            onClick={() => setShowIconOption((prev) => !prev)}
+            className="cursor-pointer hover:-translate-y-1 transition duration-300 ease-in-out"
           >
-            <option value="rain">🌧️</option>
-            <option value="storm">⛈</option>
-            <option value="snow">❄︎</option>
-            <option value="clear">☀️</option>
-            <option value="njwmxList">🐰</option>
-          </select>
-          <Image
-            src="https://staging.cohostcdn.org/attachment/8acfdaa0-1dbe-49e6-8ba5-4a59c429fd17/PROGMAN.exe%20CD.png"
-            alt="cd"
-            width={50}
-            height={50}
-            className={clsx('-ml-9', { 'animate-spin': isPlaying === true })}
-          ></Image>
-        </span>
+            {currentIcon}
+          </div>
+
+          <ul
+            className={clsx(
+              " rounded p-3 z-60 absolute bottom-10 -left-4 bg-white bg-opacity-50",
+              {
+                hidden: showIconOption === false,
+              }
+            )}
+          >
+            {playOption.map((pl, index) => (
+              <li
+                key={index}
+                className="cursor-pointer hover:bg-blue-200 rounded p-1"
+                onClick={() => pickPlayList(pl.name, pl.icon)}
+              >
+                {pl.icon}
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <button
-          className="ml-2"
+          className="ml-1 hover:-translate-y-1 transition duration-300 ease-in-out"
           onClick={() => {
             ytPlayer?.playVideo();
             setIsPlaying(true);
@@ -278,7 +268,7 @@ export default function YtPlayer() {
         </button>
 
         <button
-          className={''}
+          className="hover:-translate-y-1 transition duration-300 ease-in-out"
           onClick={() => {
             ytPlayer?.pauseVideo();
             setIsPlaying(false);
@@ -305,10 +295,7 @@ export default function YtPlayer() {
           </svg>
         </button>
       </div>
-      <div
-        className="absolute z-60 bottom-0 left-1/2 transform -translate-x-1/2 mb-5"
-        style={{ zIndex: 10 }}
-      >
+      <div className="absolute z-50 bottom-0 left-1/2 transform -translate-x-1/2 mb-5">
         <p>{videoTitle}</p>
       </div>
       <Image
@@ -340,7 +327,7 @@ export default function YtPlayer() {
         <p className="text-sm text-black-600 mr-10">
           Control volume up and down
         </p>
-      </div>{' '}
+      </div>{" "}
       {isBookClicked && (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <div className="relative">
@@ -373,9 +360,9 @@ export default function YtPlayer() {
                 onClick={toggleKoreanImage}
                 className="absolute top-0 bg-transparent text-white p-2"
                 style={{
-                  top: '97%',
-                  right: '-55px',
-                  transform: 'translateY(-50%)',
+                  top: "97%",
+                  right: "-55px",
+                  transform: "translateY(-50%)",
                 }}
               >
                 <Image src={KOREA} width={50} height={50} />
