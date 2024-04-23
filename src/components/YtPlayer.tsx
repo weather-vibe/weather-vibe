@@ -10,6 +10,12 @@ import {
 } from '../app/lib/playList';
 import getTitleByVideoIndex from '../app/utils/getTitleByIndex';
 import Image from 'next/image';
+import book from '../img/book.png';
+import EN from '../img/영어.png';
+import KO from '../img/한글.png';
+import KOREA from '../img/한국.png';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 
 const images = [
   'https://i.gifer.com/6vIk.gif',
@@ -23,16 +29,35 @@ const images = [
   'https://i.gifer.com/6OmH.gif',
 ];
 
+const MySwal = withReactContent(Swal);
+
 export default function YtPlayer() {
   const [videoTitle, setVideoTitle] = useState('');
   const [currentPlayList, setCurrentPlayList] = useState(defaultList);
   const [ytPlayer, setYtPlayer] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [issPlayListChanged, setIsPlayListChanged] = useState(0);
-  const [isPlaying, segIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [backgroundImage, setBackgroundImage] = useState(images[0]);
   const [previousImageIndex, setPreviousImageIndex] = useState(0);
   const [consecutiveSameImageCount, setConsecutiveSameImageCount] = useState(0);
+  const [isBookClicked, setIsBookClicked] = useState(false);
+  const [isKoreanImageClicked, setIsKoreanImageClicked] = useState(false);
+  useEffect(() => {
+    showNotification();
+  }, []);
+
+  const showNotification = () => {
+    Swal.fire({
+      text: 'Hey If you are new to Elementalsky, why not give the heart a click? 😊',
+      timer: 3000,
+      timerProgressBar: true,
+      toast: true,
+
+      showConfirmButton: false,
+      background: '#C5BFB1',
+    });
+  };
 
   const getRandomImage = () => {
     let randomIndex = Math.floor(Math.random() * images.length);
@@ -44,6 +69,7 @@ export default function YtPlayer() {
     }
     return randomIndex;
   };
+
   const handleRandomImage = () => {
     let randomIndex = getRandomImage();
     if (randomIndex === previousImageIndex) {
@@ -54,8 +80,9 @@ export default function YtPlayer() {
     setBackgroundImage(images[randomIndex]);
     setPreviousImageIndex(randomIndex);
   };
+
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event) => {
       if (event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
         handleRandomImage();
       }
@@ -94,7 +121,7 @@ export default function YtPlayer() {
     }
 
     setVideoTitle('');
-    segIsPlaying(false);
+    setIsPlaying(false);
   };
 
   const changeVolume = (volume) => {
@@ -103,6 +130,7 @@ export default function YtPlayer() {
       updateVolumeBar();
     }
   };
+
   const updateVolumeBar = () => {
     const volumeBar = document.getElementById('volume-bar');
     if (volumeBar) {
@@ -111,7 +139,6 @@ export default function YtPlayer() {
   };
 
   const loadYT = () => {
-    // Load the IFrame Player API code asynchronously.
     var tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -137,9 +164,7 @@ export default function YtPlayer() {
   };
 
   function onPlayerReady(event) {
-    console.log('ready');
     document.addEventListener('keydown', function (event) {
-      console.log(event.code);
       if (event.code == 'ArrowRight') {
         player?.nextVideo();
       }
@@ -148,11 +173,9 @@ export default function YtPlayer() {
       }
 
       if (event.code === 'ArrowUp') {
-        // player?.setVolume(player.getVolume() + 10);
         changeVolume(player?.getVolume() + 10);
       }
       if (event.code === 'ArrowDown') {
-        // player?.setVolume(player.getVolume() - 10);
         changeVolume(player?.getVolume() - 10);
       }
     });
@@ -161,8 +184,6 @@ export default function YtPlayer() {
   }
 
   function onPlayerStateChange(event) {
-    console.log('changed');
-    console.log('state', event.data);
     if (event.data === YT.PlayerState.PLAYING) {
       setCurrentIndex(player.getPlaylistIndex());
       setIsPlayListChanged((prev) => !prev);
@@ -176,6 +197,19 @@ export default function YtPlayer() {
   const changeTitle = () => {
     const title = getTitleByVideoIndex(currentPlayList, currentIndex);
     setVideoTitle(title);
+  };
+
+  const toggleBookClick = () => {
+    setIsBookClicked((prev) => !prev);
+  };
+
+  const toggleKoreanImage = () => {
+    setIsBookClicked(true);
+    setIsKoreanImageClicked((prev) => !prev);
+  };
+
+  const closeENImage = () => {
+    setIsBookClicked(false);
   };
 
   return (
@@ -219,7 +253,7 @@ export default function YtPlayer() {
           className="ml-2"
           onClick={() => {
             ytPlayer?.playVideo();
-            segIsPlaying(true);
+            setIsPlaying(true);
           }}
         >
           <svg
@@ -247,7 +281,7 @@ export default function YtPlayer() {
           className={''}
           onClick={() => {
             ytPlayer?.pauseVideo();
-            segIsPlaying(false);
+            setIsPlaying(false);
           }}
         >
           <svg
@@ -289,6 +323,14 @@ export default function YtPlayer() {
         className="absolute z-60 bottom-0 right-0 flex flex-col items-center"
         style={{ zIndex: 10 }}
       >
+        <Image
+          src={book}
+          alt="book"
+          width={90}
+          height={90}
+          className="absolute bottom-20 right-0 z-60 cursor-pointer"
+          onClick={toggleBookClick}
+        />
         <div className=" bg-400 h-2 w-full mr-10 rounded-full">
           <div
             id="volume-bar"
@@ -298,7 +340,50 @@ export default function YtPlayer() {
         <p className="text-sm text-black-600 mr-10">
           Control volume up and down
         </p>
-      </div>
+      </div>{' '}
+      {isBookClicked && (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="relative">
+            {isKoreanImageClicked ? (
+              <Image alt="KO Image" src={KO} width={700} height={500} />
+            ) : (
+              <Image alt="EN Image" src={EN} width={700} height={500} />
+            )}
+            <button
+              onClick={closeENImage}
+              className="absolute top-0 right-0 bg-transparent text-white p-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            {isBookClicked && (
+              <button
+                onClick={toggleKoreanImage}
+                className="absolute top-0 bg-transparent text-white p-2"
+                style={{
+                  top: '97%',
+                  right: '-55px',
+                  transform: 'translateY(-50%)',
+                }}
+              >
+                <Image src={KOREA} width={50} height={50} />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }

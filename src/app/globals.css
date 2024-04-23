@@ -31,3 +31,6 @@ body {
     text-wrap: balance;
   }
 }
+.swal2-toast .swal2-icon .swal2-icon-content img {
+  border: none !important;
+}
