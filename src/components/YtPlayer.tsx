@@ -211,33 +211,31 @@ export default function YtPlayer() {
           height={50}
           className={clsx("-mr-2", { "animate-spin": isPlaying === true })}
         ></Image>
-        <div className="relative">
-          <div
-            onClick={() => setShowIconOption((prev) => !prev)}
-            className="cursor-pointer hover:-translate-y-1 transition duration-300 ease-in-out"
-          >
-            {currentIcon}
-          </div>
-
-          <ul
-            className={clsx(
-              " rounded p-3 z-60 absolute bottom-10 -left-4 bg-white bg-opacity-50",
-              {
-                hidden: showIconOption === false,
-              }
-            )}
-          >
-            {playOption.map((pl, index) => (
-              <li
-                key={index}
-                className="cursor-pointer hover:bg-blue-200 rounded p-1"
-                onClick={() => pickPlayList(pl.name, pl.icon)}
-              >
-                {pl.icon}
-              </li>
-            ))}
-          </ul>
+        <div
+          onClick={() => setShowIconOption((prev) => !prev)}
+          className="cursor-pointer hover:-translate-y-1 transition duration-300 ease-in-out"
+        >
+          {currentIcon}
         </div>
+
+        <ul
+          className={clsx(
+            " rounded p-3 z-60 absolute bottom-10 left-1 bg-white bg-opacity-50 flex w-70 flex-wrap",
+            {
+              hidden: showIconOption === false,
+            }
+          )}
+        >
+          {playOption.map((pl, index) => (
+            <li
+              key={index}
+              className="cursor-pointer hover:bg-blue-200 rounded p-1 w-20 flex items-center justify-center"
+              onClick={() => pickPlayList(pl.name, pl.icon)}
+            >
+              {pl.icon}
+            </li>
+          ))}
+        </ul>
 
         <button
           className="ml-1 hover:-translate-y-1 transition duration-300 ease-in-out"
