@@ -94,14 +94,14 @@ export default function YtPlayer() {
   }, []);
 
   let playList = playListAll.defaultList.map((item) => item.videoId);
-  let player;
+  let player: any;
 
   useEffect(() => {
     loadYT();
   }, []);
 
-  const pickPlayList = (value, icon) => {
-    ytPlayer?.cuePlaylist(playListAll[value].map((item) => item.videoId));
+  const pickPlayList = (value: any, icon: any) => {
+    ytPlayer?.cuePlaylist(playListAll[value].map((item: any) => item.videoId));
     setCurrentPlayList(playListAll[value]);
 
     setVideoTitle("");
@@ -110,7 +110,7 @@ export default function YtPlayer() {
     setShowIconOption(false);
   };
 
-  const changeVolume = (volume) => {
+  const changeVolume = (volume: any) => {
     if (player) {
       player.setVolume(volume);
       updateVolumeBar();
@@ -128,7 +128,7 @@ export default function YtPlayer() {
     var tag = document.createElement("script");
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName("script")[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    firstScriptTag?.parentNode?.insertBefore(tag, firstScriptTag);
 
     window.onYouTubeIframeAPIReady = function () {
       player = new YT.Player("ytplayer", {
@@ -149,7 +149,7 @@ export default function YtPlayer() {
     };
   };
 
-  function onPlayerReady(event) {
+  function onPlayerReady(event: any) {
     document.addEventListener("keydown", function (event) {
       if (event.code == "ArrowRight") {
         player?.nextVideo();
@@ -169,7 +169,7 @@ export default function YtPlayer() {
     player?.cuePlaylist(playList);
   }
 
-  function onPlayerStateChange(event) {
+  function onPlayerStateChange(event: any) {
     if (event.data === YT.PlayerState.PLAYING) {
       setCurrentIndex(player.getPlaylistIndex());
       setIsPlayListChanged((prev) => !prev);
@@ -363,7 +363,7 @@ export default function YtPlayer() {
                   transform: "translateY(-50%)",
                 }}
               >
-                <Image src={KOREA} width={50} height={50} />
+                <Image src={KOREA} width={50} height={50} alt="" />
               </button>
             )}
           </div>
