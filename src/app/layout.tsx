@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import SearchBar from "@/components/SearchBar";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col w-full h-screen">
-        <SearchBar></SearchBar>
-        {children}
+        <Suspense>
+          <SearchBar></SearchBar>
+          {children}
+        </Suspense>
       </body>
     </html>
   );
