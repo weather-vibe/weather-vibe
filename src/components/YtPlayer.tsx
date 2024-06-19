@@ -32,7 +32,7 @@ export default function YtPlayer() {
   );
   const [ytPlayer, setYtPlayer] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [issPlayListChanged, setIsPlayListChanged] = useState(0);
+  const [issPlayListChanged, setIsPlayListChanged] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [backgroundImage, setBackgroundImage] = useState(images[0]);
   const [previousImageIndex, setPreviousImageIndex] = useState(0);
