@@ -80,7 +80,7 @@ export default function YtPlayer() {
   };
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: any) => {
       if (event.code === "ArrowLeft" || event.code === "ArrowRight") {
         handleRandomImage();
       }
