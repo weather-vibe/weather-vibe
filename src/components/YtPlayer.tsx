@@ -323,7 +323,7 @@ export default function YtPlayer() {
           ></div>
         </div>
         <p className="text-sm text-black-600 mr-10">
-          Control volume up and down
+          Control volume with ⬆️ ⬇️
         </p>
       </div>{" "}
       {isBookClicked && (
