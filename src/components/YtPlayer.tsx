@@ -10,18 +10,25 @@ import KO from "../img/한글.png";
 import KOREA from "../img/한국.png";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import car from "../img/car.gif";
+import sakura from "../img/sakura.gif";
+import night from "../img/night.gif";
+import toy from "../img/toy.gif";
+import city from "../img/city.gif";
 
-const images = [
-  "https://i.gifer.com/6vIk.gif",
-  "https://i.gifer.com/xK.gif",
-  "https://i.gifer.com/YQgT.gif",
-  "https://i.gifer.com/PPy.gif",
-  "https://i.gifer.com/GVue.gif",
-  "https://i.gifer.com/2swA.gif",
-  "https://i.gifer.com/Mf08.gif",
-  "https://i.gifer.com/Xgd3.gif",
-  "https://i.gifer.com/6OmH.gif",
-];
+// const images = [
+//   "https://i.gifer.com/6vIk.gif",
+//   "https://i.gifer.com/xK.gif",
+//   "https://i.gifer.com/YQgT.gif",
+//   "https://i.gifer.com/PPy.gif",
+//   "https://i.gifer.com/GVue.gif",
+//   "https://i.gifer.com/2swA.gif",
+//   "https://i.gifer.com/Mf08.gif",
+//   "https://i.gifer.com/Xgd3.gif",
+//   "https://i.gifer.com/6OmH.gif",
+// ];
+
+const images = [car, sakura, night, city, toy];
 
 const MySwal = withReactContent(Swal);
 
@@ -243,6 +250,7 @@ export default function YtPlayer() {
             ytPlayer?.playVideo();
             setIsPlaying(true);
           }}
+          style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -279,6 +287,7 @@ export default function YtPlayer() {
             strokeWidth="1.5"
             stroke="currentColor"
             className="w-6 h-6"
+            style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
           >
             <path
               strokeLinecap="round"
@@ -294,7 +303,7 @@ export default function YtPlayer() {
         </button>
       </div>
       <div className="absolute z-50 bottom-0 left-1/2 transform -translate-x-1/2 mb-5">
-        <p>{videoTitle}</p>
+        <p style={{ filter: "drop-shadow(0 0 0.2rem white)" }}>{videoTitle}</p>
       </div>
       <Image
         alt="zzz"
@@ -316,13 +325,16 @@ export default function YtPlayer() {
           className="absolute bottom-20 right-0 z-60 cursor-pointer"
           onClick={toggleBookClick}
         />
-        <div className=" bg-400 h-2 w-full mr-10 rounded-full">
+        <div className=" bg-400 h-2 w-full mr-10 rounded-full mb-2">
           <div
             id="volume-bar"
             className="bg-pink-500 h-full w-full rounded-full"
           ></div>
         </div>
-        <p className="text-sm text-black-600 mr-10">
+        <p
+          className="text-sm text-black-600 mr-10 mb-2"
+          style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
+        >
           Control volume with ⬆️ ⬇️
         </p>
       </div>{" "}
