@@ -305,14 +305,14 @@ export default function YtPlayer() {
       <div className="absolute z-50 bottom-0 left-1/2 transform -translate-x-1/2 mb-5">
         <p style={{ filter: "drop-shadow(0 0 0.2rem white)" }}>{videoTitle}</p>
       </div>
-      <Image
+      {/* <Image
         alt="zzz"
         src={backgroundImage}
         width={0}
         height={0}
         sizes="100vw"
         className="w-full h-screen absolute top-0 right-0"
-      ></Image>
+      ></Image> */}
       <div
         className="absolute z-60 bottom-0 right-0 flex flex-col items-center"
         style={{ zIndex: 10 }}
