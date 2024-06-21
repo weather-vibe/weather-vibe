@@ -9,7 +9,7 @@ export default function Home({
   searchParams?: { lat?: string; lon?: string };
 }) {
   return (
-    <div>
+    <div className="px-10">
       <Suspense fallback={<div>!!!</div>}>
         <WeatherInfo searchParams={searchParams}></WeatherInfo>
       </Suspense>

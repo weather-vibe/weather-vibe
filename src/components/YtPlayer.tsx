@@ -139,8 +139,8 @@ export default function YtPlayer() {
 
     window.onYouTubeIframeAPIReady = function () {
       player = new YT.Player("ytplayer", {
-        height: "360",
-        width: "640",
+        height: "0",
+        width: "0",
         playerVars: {
           controls: 0,
           enablejsapi: 1,
@@ -210,121 +210,128 @@ export default function YtPlayer() {
       <div className="pointer-events-none ">
         <div id="ytplayer"></div>
       </div>
-      <div className="absolute z-50 bottom-0 left-0 mb-5 flex items-center">
-        <Image
-          src="https://staging.cohostcdn.org/attachment/8acfdaa0-1dbe-49e6-8ba5-4a59c429fd17/PROGMAN.exe%20CD.png"
-          alt="cd"
-          width={50}
-          height={50}
-          className={clsx("-mr-2", { "animate-spin": isPlaying === true })}
-        ></Image>
-        <div
-          onClick={() => setShowIconOption((prev) => !prev)}
-          className="cursor-pointer hover:-translate-y-1 transition duration-300 ease-in-out"
-        >
-          {currentIcon}
-        </div>
-
-        <ul
-          className={clsx(
-            " rounded p-3 z-60 absolute bottom-10 left-1 bg-white bg-opacity-50 flex w-70 flex-wrap",
-            {
-              hidden: showIconOption === false,
-            }
-          )}
-        >
-          {playOption.map((pl, index) => (
-            <li
-              key={index}
-              className="cursor-pointer hover:bg-blue-200 rounded p-1 w-20 flex items-center justify-center"
-              onClick={() => pickPlayList(pl.name, pl.icon)}
-            >
-              {pl.icon}
-            </li>
-          ))}
-        </ul>
-
-        <button
-          className="ml-1 hover:-translate-y-1 transition duration-300 ease-in-out"
-          onClick={() => {
-            ytPlayer?.playVideo();
-            setIsPlaying(true);
-          }}
-          style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"
-            />
-          </svg>
-        </button>
-
-        <button
-          className="hover:-translate-y-1 transition duration-300 ease-in-out"
-          onClick={() => {
-            ytPlayer?.pauseVideo();
-            setIsPlaying(false);
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6"
-            style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z"
-            />
-          </svg>
-        </button>
-      </div>
-      <div className="absolute z-50 bottom-0 left-1/2 transform -translate-x-1/2 mb-5">
-        <p style={{ filter: "drop-shadow(0 0 0.2rem white)" }}>{videoTitle}</p>
-      </div>
       <Image
         alt="zzz"
         src={backgroundImage}
-        width={0}
-        height={0}
+        fill
         sizes="100vw"
-        className="w-full h-screen absolute top-0 right-0"
+        className="absolute top-0 right-0 select-none "
+        objectFit="cover"
       ></Image>
-      <div
+      {/* bottom */}
+      <div className="fixed z-50 bottom-0 left-0  right-0 ">
+        <div className="flex flex-col lg:flex-row items-center px-10 justify-between ">
+          <div className="flex items-center w-[150px] justify-between">
+            <Image
+              src="https://staging.cohostcdn.org/attachment/8acfdaa0-1dbe-49e6-8ba5-4a59c429fd17/PROGMAN.exe%20CD.png"
+              alt="cd"
+              width={50}
+              height={50}
+              className={clsx("", { "animate-spin": isPlaying === true })}
+            ></Image>
+            <div
+              onClick={() => setShowIconOption((prev) => !prev)}
+              className="relative cursor-pointer hover:-translate-y-1 transition duration-300 ease-in-out"
+            >
+              {currentIcon}
+              <ul
+                className={clsx(
+                  " rounded p-3 z-60 absolute bottom-10 -left-11 bg-white bg-opacity-50 flex w-70 flex-wrap",
+                  {
+                    hidden: showIconOption === false,
+                  }
+                )}
+              >
+                {playOption.map((pl, index) => (
+                  <li
+                    key={index}
+                    className="cursor-pointer hover:bg-blue-200 rounded p-1 w-20 flex items-center justify-center"
+                    onClick={() => pickPlayList(pl.name, pl.icon)}
+                  >
+                    {pl.icon}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <button
+              className="ml-1 hover:-translate-y-1 transition duration-300 ease-in-out"
+              onClick={() => {
+                ytPlayer?.playVideo();
+                setIsPlaying(true);
+              }}
+              style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"
+                />
+              </svg>
+            </button>
+
+            <button
+              className="hover:-translate-y-1 transition duration-300 ease-in-out"
+              onClick={() => {
+                ytPlayer?.pauseVideo();
+                setIsPlaying(false);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+                style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z"
+                />
+              </svg>
+            </button>
+          </div>
+          {/* song title */}
+          <p style={{ filter: "drop-shadow(0 0 0.2rem white)" }}>
+            {videoTitle}
+          </p>
+
+          <Image
+            src={book}
+            alt="book"
+            width={90}
+            height={90}
+            className="cursor-pointer"
+            onClick={toggleBookClick}
+          />
+        </div>
+      </div>
+
+      {/* <div
         className="absolute z-60 bottom-0 right-0 flex flex-col items-center"
         style={{ zIndex: 10 }}
       >
-        <Image
-          src={book}
-          alt="book"
-          width={90}
-          height={90}
-          className="absolute bottom-20 right-0 z-60 cursor-pointer"
-          onClick={toggleBookClick}
-        />
         <div className=" bg-400 h-2 w-full mr-10 rounded-full mb-2">
           <div
             id="volume-bar"
@@ -337,7 +344,7 @@ export default function YtPlayer() {
         >
           Control volume with ⬆️ ⬇️
         </p>
-      </div>{" "}
+      </div> */}
       {isBookClicked && (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <div className="relative">
