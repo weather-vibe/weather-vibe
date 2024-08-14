@@ -58,8 +58,8 @@ export default function SearchBar({}: Props) {
   };
 
   return (
-    <div className="pl-10 absolute z-50 right-10 pt-2">
-      <div className="flex items-center">
+    <div className="z-50">
+      <div className="flex items-center mt-8">
         <input
           type="text"
           placeholder="search location.."
@@ -73,10 +73,10 @@ export default function SearchBar({}: Props) {
 
         <div
           onClick={getCurrentLocation}
-          className="cursor-pointer -mr-8 ml-3"
+          className="cursor-pointer -mr-8 ml-3 text-white"
           style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
         >
-          <IoLocationOutline />
+          <IoLocationOutline style={{ width: "30px", height: "30px" }} />
         </div>
       </div>
       <Suggestion listData={cityList} onCityClick={onCityClick}></Suggestion>

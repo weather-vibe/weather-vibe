@@ -18,6 +18,6 @@ export default function Suggestion({
       ))}
     </ul>
   ) : (
-    <div className="bg-white absolute rounded p-3">not found</div>
+    <div className="bg-white rounded p-3">not found</div>
   );
 }

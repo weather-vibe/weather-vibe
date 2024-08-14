@@ -16,14 +16,14 @@ export default async function WeatherInfo({
   const weather = currentWeather.weather[0];
 
   return (
-    <div className="z-50 absolute flex flex-col items-center  lg:flex-row">
-      <div className="flex items-center">
-        <span
-          className="filter drop-shadow-md text-white-500 text-md lg:text-2xl"
-          style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
-        >
-          {temp}°C {weather.description}
-        </span>
+    <div className="z-50 flex flex-row items-center h-[100px]">
+      <span
+        className="filter drop-shadow-md text-white-500 text-md lg:text-2xl text-white"
+        style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
+      >
+        {temp}°C {weather.description}
+      </span>
+      <div>
         <Image
           alt="weather-icon"
           width={50}
@@ -32,7 +32,7 @@ export default async function WeatherInfo({
         ></Image>
       </div>
       <p
-        className="filter drop-shadow-md text-white-500 text-md lg:text-2xl"
+        className="filter drop-shadow-md text-white-500 text-md lg:text-2xl text-white"
         style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
       >
         {city || currentWeather.name}

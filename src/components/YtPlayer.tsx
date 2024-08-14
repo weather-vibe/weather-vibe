@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import clsx from "clsx";
 import { playListAll, playOption } from "../app/lib/playList";
 import getTitleByVideoIndex from "../app/utils/getTitleByIndex";
@@ -8,53 +8,72 @@ import book from "../img/book.png";
 import EN from "../img/영어.png";
 import KO from "../img/한글.png";
 import KOREA from "../img/한국.png";
-import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-import car from "../img/car.gif";
-import sakura from "../img/sakura.gif";
-import night from "../img/night.gif";
-import toy from "../img/toy.gif";
-import city from "../img/city.gif";
 
-// const images = [
-//   "https://i.gifer.com/6vIk.gif",
-//   "https://i.gifer.com/xK.gif",
-//   "https://i.gifer.com/YQgT.gif",
-//   "https://i.gifer.com/PPy.gif",
-//   "https://i.gifer.com/GVue.gif",
-//   "https://i.gifer.com/2swA.gif",
-//   "https://i.gifer.com/Mf08.gif",
-//   "https://i.gifer.com/Xgd3.gif",
-//   "https://i.gifer.com/6OmH.gif",
-// ];
-
-const images = [car, sakura, night, city, toy];
-
-const MySwal = withReactContent(Swal);
+const images = [
+  "https://i.gifer.com/6OmH.gif",
+  "https://i.gifer.com/6vIk.gif",
+  "https://i.gifer.com/PPy.gif",
+  "https://i.gifer.com/380e.gif",
+  "https://i.gifer.com/NWi5.gif",
+  "https://i.gifer.com/2ruN.gif",
+  "https://i.gifer.com/TTOl.gif",
+  "https://i.gifer.com/IN4R.gif",
+  "https://i.gifer.com/g3Ys.gif",
+  "https://i.gifer.com/MVOE.gif",
+  "https://i.gifer.com/2qQQ.gif",
+  "https://i.gifer.com/YmYu.gif",
+  "https://i.gifer.com/G6ut.gif",
+  "https://i.gifer.com/Y4Qv.gif",
+  "https://i.gifer.com/7M1g.gif",
+  "https://i.gifer.com/I0Wr.gif",
+  "https://i.gifer.com/8qG.gif",
+  "https://i.gifer.com/7Tzm.gif",
+  "https://i.gifer.com/1gp7.gif",
+  "https://i.gifer.com/2A5.gif",
+  "https://i.gifer.com/1gPG.gif",
+  "https://i.gifer.com/PArT.gif",
+  "https://i.gifer.com/5Q06.gif",
+  "https://i.gifer.com/6t1D.gif",
+  "https://i.gifer.com/Cay5.gif",
+  "https://i.gifer.com/K7l7.gif",
+  "https://i.gifer.com/7jnE.gif",
+  "https://i.gifer.com/AI5S.gif",
+  "https://i.gifer.com/90m5.gif",
+  "https://i.gifer.com/C6UO.gif",
+];
+let randomImgIndex = Math.floor(Math.random() * images.length);
 
 export default function YtPlayer() {
+  const arrowUpRef = useRef(null);
   const [videoTitle, setVideoTitle] = useState("");
   const [currentPlayList, setCurrentPlayList] = useState(
     playListAll.defaultList
   );
   const [ytPlayer, setYtPlayer] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [issPlayListChanged, setIsPlayListChanged] = useState(false);
+  const [isPlayListChanged, setIsPlayListChanged] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [backgroundImage, setBackgroundImage] = useState(images[0]);
-  const [previousImageIndex, setPreviousImageIndex] = useState(0);
-  const [consecutiveSameImageCount, setConsecutiveSameImageCount] = useState(0);
+  const [backgroundImage, setBackgroundImage] = useState(
+    images[randomImgIndex]
+  );
   const [isBookClicked, setIsBookClicked] = useState(false);
   const [isKoreanImageClicked, setIsKoreanImageClicked] = useState(false);
   const [currentIcon, setCurrentIcon] = useState("💗");
   const [showIconOption, setShowIconOption] = useState(false);
+
   useEffect(() => {
+    loadYT();
     showNotification();
   }, []);
 
+  useEffect(() => {
+    changeTitle();
+  }, [isPlayListChanged]);
+
   const showNotification = () => {
     Swal.fire({
-      text: "Hey If you are new to Elementalsky, why not give the heart a click? 😊",
+      text: `Hi there, welcome to ElementalSky and enjoy yourself 😊`,
       timer: 3000,
       timerProgressBar: true,
       toast: true,
@@ -64,72 +83,42 @@ export default function YtPlayer() {
     });
   };
 
-  const getRandomImage = () => {
-    let randomIndex = Math.floor(Math.random() * images.length);
-    while (
-      randomIndex === previousImageIndex &&
-      consecutiveSameImageCount >= 1
-    ) {
-      randomIndex = Math.floor(Math.random() * images.length);
-    }
-    return randomIndex;
-  };
-
   const handleRandomImage = () => {
-    let randomIndex = getRandomImage();
-    if (randomIndex === previousImageIndex) {
-      setConsecutiveSameImageCount((count) => count + 1);
-    } else {
-      setConsecutiveSameImageCount(0);
+    const previousImgIndex = randomImgIndex;
+    randomImgIndex = Math.floor(Math.random() * images.length);
+    if (previousImgIndex === randomImgIndex) {
+      previousImgIndex === images.length - 1
+        ? randomImgIndex--
+        : randomImgIndex++;
     }
-    setBackgroundImage(images[randomIndex]);
-    setPreviousImageIndex(randomIndex);
+    setBackgroundImage(images[randomImgIndex]);
   };
-
-  useEffect(() => {
-    const handleKeyDown = (event: any) => {
-      if (event.code === "ArrowLeft" || event.code === "ArrowRight") {
-        handleRandomImage();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
 
   let playList = playListAll.defaultList.map((item) => item.videoId);
   let player: any;
-
-  useEffect(() => {
-    loadYT();
-  }, []);
 
   const pickPlayList = (value: any, icon: any) => {
     ytPlayer?.cuePlaylist(playListAll[value].map((item: any) => item.videoId));
     setCurrentPlayList(playListAll[value]);
 
     setVideoTitle("");
-    setIsPlaying(false);
     setCurrentIcon(icon);
     setShowIconOption(false);
   };
 
-  const changeVolume = (volume: any) => {
-    if (player) {
-      player.setVolume(volume);
-      updateVolumeBar();
-    }
-  };
+  // const changeVolume = (volume: any) => {
+  //   if (player) {
+  //     player.setVolume(volume);
+  //     updateVolumeBar();
+  //   }
+  // };
 
-  const updateVolumeBar = () => {
-    const volumeBar = document.getElementById("volume-bar");
-    if (volumeBar) {
-      volumeBar.style.width = `${player.getVolume()}%`;
-    }
-  };
+  // const updateVolumeBar = () => {
+  //   const volumeBar = document.getElementById("volume-bar");
+  //   if (volumeBar) {
+  //     volumeBar.style.width = `${player.getVolume()}%`;
+  //   }
+  // };
 
   const loadYT = () => {
     var tag = document.createElement("script");
@@ -152,11 +141,13 @@ export default function YtPlayer() {
           onStateChange: onPlayerStateChange,
         },
       });
+
       setYtPlayer(player);
     };
   };
+  console.log("dd", ytPlayer);
 
-  function onPlayerReady(event: any) {
+  function onPlayerReady() {
     document.addEventListener("keydown", function (event) {
       if (event.code == "ArrowRight") {
         player?.nextVideo();
@@ -166,26 +157,29 @@ export default function YtPlayer() {
       }
 
       if (event.code === "ArrowUp") {
-        changeVolume(player?.getVolume() + 10);
+        // changeVolume(player?.getVolume() + 10);
+        arrowUpRef.current.click();
       }
       if (event.code === "ArrowDown") {
-        changeVolume(player?.getVolume() - 10);
+        handleRandomImage();
+        // changeVolume(player?.getVolume() - 10);
       }
     });
-    event.target.playVideo();
     player?.cuePlaylist(playList);
+    player.setLoop(true);
   }
 
   function onPlayerStateChange(event: any) {
     if (event.data === YT.PlayerState.PLAYING) {
       setCurrentIndex(player.getPlaylistIndex());
       setIsPlayListChanged((prev) => !prev);
+      setIsPlaying(true);
+    } else if (event.data === YT.PlayerState.ENDED) {
+      player.playVideoAt(0); // 첫 번째 비디오로 돌아가기
+    } else {
+      setIsPlaying(false);
     }
   }
-
-  useEffect(() => {
-    changeTitle();
-  }, [issPlayListChanged]);
 
   const changeTitle = () => {
     const title = getTitleByVideoIndex(currentPlayList, currentIndex);
@@ -211,54 +205,24 @@ export default function YtPlayer() {
         <div id="ytplayer"></div>
       </div>
       <Image
-        alt="zzz"
+        alt="background img"
         src={backgroundImage}
         fill
         sizes="100vw"
         className="absolute top-0 right-0 select-none "
         objectFit="cover"
       ></Image>
-      {/* bottom */}
-      <div className="fixed z-50 bottom-0 left-0  right-0 ">
-        <div className="flex flex-col lg:flex-row items-center px-10 justify-between ">
-          <div className="flex items-center w-[150px] justify-between">
-            <Image
-              src="https://staging.cohostcdn.org/attachment/8acfdaa0-1dbe-49e6-8ba5-4a59c429fd17/PROGMAN.exe%20CD.png"
-              alt="cd"
-              width={50}
-              height={50}
-              className={clsx("", { "animate-spin": isPlaying === true })}
-            ></Image>
-            <div
-              onClick={() => setShowIconOption((prev) => !prev)}
-              className="relative cursor-pointer hover:-translate-y-1 transition duration-300 ease-in-out"
-            >
-              {currentIcon}
-              <ul
-                className={clsx(
-                  " rounded p-3 z-60 absolute bottom-10 -left-11 bg-white bg-opacity-50 flex w-70 flex-wrap",
-                  {
-                    hidden: showIconOption === false,
-                  }
-                )}
-              >
-                {playOption.map((pl, index) => (
-                  <li
-                    key={index}
-                    className="cursor-pointer hover:bg-blue-200 rounded p-1 w-20 flex items-center justify-center"
-                    onClick={() => pickPlayList(pl.name, pl.icon)}
-                  >
-                    {pl.icon}
-                  </li>
-                ))}
-              </ul>
-            </div>
 
+      {/* bottom */}
+      <div className="fixed z-50 bottom-0 left-0 right-0 ">
+        <div className="flex flex-col lg:flex-row items-center px-10 justify-between">
+          {/* left side */}
+          <div className="flex items-center w-[120px] justify-between ">
+            {/* play */}
             <button
-              className="ml-1 hover:-translate-y-1 transition duration-300 ease-in-out"
+              className="ml-1 hover:-translate-y-1 transition duration-300 ease-in-out text-white"
               onClick={() => {
                 ytPlayer?.playVideo();
-                setIsPlaying(true);
               }}
               style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
             >
@@ -268,7 +232,7 @@ export default function YtPlayer() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-8 h-8"
               >
                 <path
                   strokeLinecap="round"
@@ -282,12 +246,11 @@ export default function YtPlayer() {
                 />
               </svg>
             </button>
-
+            {/* pause */}
             <button
-              className="hover:-translate-y-1 transition duration-300 ease-in-out"
+              className="hover:-translate-y-1 transition duration-300 ease-in-out text-white"
               onClick={() => {
                 ytPlayer?.pauseVideo();
-                setIsPlaying(false);
               }}
             >
               <svg
@@ -296,7 +259,7 @@ export default function YtPlayer() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-8 h-8"
                 style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
               >
                 <path
@@ -311,20 +274,104 @@ export default function YtPlayer() {
                 />
               </svg>
             </button>
+            {/* playlist */}
+            <div
+              onClick={() => setShowIconOption((prev) => !prev)}
+              className="relative cursor-pointer hover:-translate-y-1 transition duration-300 ease-in-out"
+            >
+              <p className="text-2xl">{currentIcon}</p>
+              <ul
+                className={clsx(
+                  " rounded p-3 z-60 absolute bottom-10 -left-11 bg-white bg-opacity-50 flex w-70 flex-wrap",
+                  {
+                    hidden: showIconOption === false,
+                  }
+                )}
+              >
+                {playOption.map((pl, index) => (
+                  <li
+                    key={index}
+                    className="cursor-pointer hover:bg-blue-200 rounded p-1 w-20 flex items-center justify-center"
+                    onClick={() => {
+                      pickPlayList(pl.name, pl.icon);
+                      setShowIconOption((prev) => !prev);
+                    }}
+                  >
+                    {pl.icon}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          {/* song title */}
-          <p style={{ filter: "drop-shadow(0 0 0.2rem white)" }}>
-            {videoTitle}
-          </p>
+          {/* center */}
+          <div className="flex items-center ">
+            {/* song title */}
+            <p
+              style={{
+                filter: "drop-shadow(0 0 0.2rem white)",
+                color: "white",
+              }}
+            >
+              {videoTitle}
+            </p>
+            {/* cd */}
+            {videoTitle && (
+              <Image
+                src="https://staging.cohostcdn.org/attachment/8acfdaa0-1dbe-49e6-8ba5-4a59c429fd17/PROGMAN.exe%20CD.png"
+                alt="cd"
+                width={70}
+                height={70}
+                className={clsx("", {
+                  "animate-spin": isPlaying === true,
+                })}
+              ></Image>
+            )}
+          </div>
+          {/* right */}
+          <div
+            className="flex flex-col items-center text-white mb-3"
+            style={{ filter: "drop-shadow(0 0 0.2rem green)" }}
+          >
+            <button
+              className="w-[30px] h-[20px] border rounded-md flex items-center justify-center active:text-sm hover:text-violet-200 hover:border-violet-200"
+              onClick={() => {
+                handleRandomImage();
+              }}
+              ref={arrowUpRef}
+            >
+              △
+            </button>
+            <div className="flex flex-row">
+              <button
+                className="w-[30px] h-[20px] border rounded-md flex items-center justify-center active:text-sm hover:text-violet-200 hover:border-violet-200"
+                onClick={() => ytPlayer?.previousVideo()}
+              >
+                ◁
+              </button>
+              <button
+                className="w-[30px] h-[20px] border rounded-md flex items-center justify-center active:text-sm hover:text-violet-200 hover:border-violet-200"
+                onClick={handleRandomImage}
+              >
+                ▽
+              </button>
+              <button
+                className="w-[30px] h-[20px] border rounded-md flex items-center justify-center active:text-sm hover:text-violet-200 hover:border-violet-200"
+                onClick={() => ytPlayer?.nextVideo()}
+              >
+                ▷
+              </button>
+            </div>
+          </div>
 
-          <Image
+          {/* guide */}
+          {/* <Image
             src={book}
             alt="book"
             width={90}
             height={90}
             className="cursor-pointer"
             onClick={toggleBookClick}
-          />
+          /> */}
         </div>
       </div>
 
@@ -349,9 +396,9 @@ export default function YtPlayer() {
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <div className="relative">
             {isKoreanImageClicked ? (
-              <Image alt="KO Image" src={KO} width={700} height={500} />
+              <Image alt="KO Image" src={KO} width={500} height={400} />
             ) : (
-              <Image alt="EN Image" src={EN} width={700} height={500} />
+              <Image alt="EN Image" src={EN} width={500} height={400} />
             )}
             <button
               onClick={closeENImage}
