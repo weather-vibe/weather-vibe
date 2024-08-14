@@ -70,5 +70,5 @@ export const playOption = [
   { name: "defaultList", icon: "💗" },
   { name: "rainyList", icon: "☔️" },
   { name: "winterSnowList", icon: "❄️" },
-  { name: "njwmxList", icon: "🐰" },
+  { name: "njrmxList", icon: "🐰" },
 ];

@@ -220,7 +220,7 @@ export default function YtPlayer() {
           <div className="flex items-center w-[120px] justify-between ">
             {/* play */}
             <button
-              className="ml-1 hover:-translate-y-1 transition duration-300 ease-in-out text-white"
+              className="ml-1 hover:text-violet-200 text-white active:scale-75 transition duration-300 ease-in-out"
               onClick={() => {
                 ytPlayer?.playVideo();
               }}
@@ -248,7 +248,7 @@ export default function YtPlayer() {
             </button>
             {/* pause */}
             <button
-              className="hover:-translate-y-1 transition duration-300 ease-in-out text-white"
+              className="hover:text-violet-200 transition duration-300 ease-in-out text-white active:scale-75"
               onClick={() => {
                 ytPlayer?.pauseVideo();
               }}
@@ -304,7 +304,7 @@ export default function YtPlayer() {
             </div>
           </div>
           {/* center */}
-          <div className="flex items-center ">
+          <div className="flex items-center h-[70px]">
             {/* song title */}
             <p
               style={{
