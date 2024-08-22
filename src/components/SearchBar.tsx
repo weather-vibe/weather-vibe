@@ -4,7 +4,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import Suggestion from "./Suggestion";
 import { Suspense, useState } from "react";
-import { IoLocationOutline } from "react-icons/io5";
+import Image from "next/image";
+import locationIcon from "../img/location.png";
 
 type Props = {};
 type CityArray = any[] | null;
@@ -31,6 +32,7 @@ export default function SearchBar({}: Props) {
   };
 
   const onCityClick = (lat: number, lon: number, location: string) => {
+    console.log("selected");
     params.set("lat", lat.toString());
     params.set("lon", lon.toString());
     params.set("city", location);
@@ -38,6 +40,7 @@ export default function SearchBar({}: Props) {
     replace(`${pathname}?${params.toString()}`);
     setLocation(location);
     setCityList(null);
+    console.log("selected");
   };
 
   const getCurrentLocation = () => {
@@ -52,7 +55,6 @@ export default function SearchBar({}: Props) {
         );
         params.set("city", currentWeather.name);
         replace(`${pathname}?${params.toString()}`);
-        console.log(position);
       });
     }
   };
@@ -63,7 +65,7 @@ export default function SearchBar({}: Props) {
         <input
           type="text"
           placeholder="search location.."
-          className="px-3 py-2 border bg-transparent border-400 rounded-md focus:outline-none focus:border-green-300"
+          className="px-3 py-2 border rounded-sm bg-transparent border-400 focus:outline-none focus:border-green-300 text-white"
           onChange={(e) => {
             handleInputChange(e.target.value);
           }}
@@ -76,7 +78,7 @@ export default function SearchBar({}: Props) {
           className="cursor-pointer -mr-8 ml-3 text-white"
           style={{ filter: "drop-shadow(0 0 0.2rem white)" }}
         >
-          <IoLocationOutline style={{ width: "30px", height: "30px" }} />
+          <Image src={locationIcon} alt="location" width={32} height={32} />
         </div>
       </div>
       <Suggestion listData={cityList} onCityClick={onCityClick}></Suggestion>

@@ -10,7 +10,7 @@ export default function Suggestion({
       {listData.map((city, index) => (
         <li
           key={index}
-          className="cursor-pointer hover:bg-blue-200 rounded p-1"
+          className="cursor-pointer hover:text-lg transition-all duration-200 rounded p-1 h-[30px]"
           onClick={() => onCityClick(city.lat, city.lon, city.name)}
         >
           {city.name}

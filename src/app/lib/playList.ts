@@ -1,4 +1,4 @@
-const defaultList = [
+const nightList = [
   {
     videoId: "UedTcufyrHc",
     title: "ChillSynth FM - lofi synthwave radio for retro dreaming",
@@ -20,55 +20,123 @@ const rainyList = [
     title:
       "A Rainy Day in 4K Cozy Coffee Shop ❄ Background Instrumental to Relax, Study, Work",
   },
-];
-const winterSnowList = [
+
   {
-    videoId: "HjjerHh0MFg",
+    videoId: "YrlgRH_8Bhg",
     title:
-      "4K Cozy Coffee Shop ☕ Smooth Piano Jazz Music for Relax, Study, Sleep ☕ Night Winter",
+      "A Rainy Day in 4K Cozy Coffee Shop ❄ Background Instrumental to Relax, Study, Work",
+  },
+  {
+    videoId: "ubNfkpbxXUs",
+    title:
+      "Rainforest Rain Sounds for Sleeping or Studying 🌧️ White Noise Rainstorm 10 Hours",
   },
 ];
+const sunnyDayList = [
+  {
+    videoId: "XEOtA0g7gZc",
+    title:
+      "Relaxing Jazz Music at Morning Cozy Coffee Shop & Smooth Bossa Nova instrumental for Good mood, work",
+  },
+];
+const personalList = [
+  {
+    videoId: "52avIJWQWAY",
+    title: "Just The Two Of Us",
+  },
+  {
+    videoId: "OqfaVUgjuMY",
+    title: "violet skies",
+  },
+  {
+    videoId: "hu9P7ViuOQQ",
+    title: "Jenevieve - Résumé",
+  },
+  {
+    videoId: "QnLQ-0NA6pk",
+    title: "Jenevieve - Medallion",
+  },
+  {
+    videoId: "O1Qh7j1yD8Y",
+    title: "Jenevieve - Baby Powder",
+  },
+  {
+    videoId: "EfgAd6iHApE",
+    title: "FKJ - Ylang Ylang",
+  },
+];
+
+// const winterSnowList = [
+//   {
+//     videoId: "HjjerHh0MFg",
+//     title:
+//       "4K Cozy Coffee Shop ☕ Smooth Piano Jazz Music for Relax, Study, Sleep ☕ Night Winter",
+//   },
+// ];
+
 const njrmxList = [
-  { videoId: "Ul-SozyHvBc", title: "'Attention – 250 Remix' Official Audio" },
-  { videoId: "ZVwuD0oGsog", title: "'Hype Boy – 250 Remix' Official Audio" },
-  { videoId: "gPn91nclGhg", title: "'Cookie – FRNK Remix' Official Audio" },
-  { videoId: "S99wEBCT4rs", title: "'Hurt – 250 Remix' Official Audio" },
   {
     videoId: "vpy8_eum-90",
-    title: "뉴진스 NewJeans 'OMG' (Future Funk Remix)",
+    title: "NewJeans 'OMG' (Future Funk Remix)",
   },
-  { videoId: "ZncbtRo7RXs", title: "NewJeans (뉴진스) - Ditto (80's Remix)" },
-  { videoId: "4BryEJtMN7I", title: "'NewJeans (뉴진스) - Ditto (80's Remix)" },
+  {
+    videoId: "Ul-SozyHvBc",
+    title: "'Attention - 250 Remix' Official Audio",
+  },
+  {
+    videoId: "4BryEJtMN7I",
+    title: "'NewJeans - Ditto (80's Remix)",
+  },
+  {
+    videoId: "ZVwuD0oGsog",
+    title: "'Hype Boy - 250 Remix' Official Audio",
+  },
   {
     videoId: "BoETpDHNp4k",
-    title: "NewJeans(뉴진스) - Cookie [Remix] Sweeter Ver.",
+    title: "NewJeans - Cookie [Remix] Sweeter Ver.",
   },
   {
     videoId: "te_e-ZooMhA",
-    title: "NewJeans (뉴진스) - 'OMG' (Jazz Piano Remix) (Prod. MINDA)",
+    title: "NewJeans - 'OMG' (Jazz Piano Remix) (Prod. MINDA)",
   },
-  { videoId: "tcTK4VusNJs", title: "NewJeans 뉴진스 'Bad Cookie'" },
+  {
+    videoId: "S99wEBCT4rs",
+    title: "'Hurt - 250 Remix' Official Audio",
+  },
+  {
+    videoId: "tcTK4VusNJs",
+    title: "NewJeans 'Bad Cookie'",
+  },
   {
     videoId: "_7_Vm0zfPgM",
-    title: "Newjeans - Get up remix (Extended Chill ver.)",
+    title: "NewJeans - Get up remix (Extended Chill ver.)",
   },
   {
     videoId: "g1jvK7gWS2k",
     title: "NewJeans - OMG (House remix)",
   },
-  { videoId: "4BryEJtMN7I", title: "'NewJeans (뉴진스) - Ditto (80's Remix)" },
+  {
+    videoId: "gPn91nclGhg",
+    title: "'Cookie - FRNK Remix' Official Audio",
+  },
+  {
+    videoId: "4BryEJtMN7I",
+    title: "'NewJeans - Ditto (80's Remix)",
+  },
 ];
 
 export const playListAll = {
-  defaultList,
+  nightList,
   rainyList,
-  winterSnowList,
+  sunnyDayList,
+  personalList,
   njrmxList,
 };
 
 export const playOption = [
-  { name: "defaultList", icon: "💗" },
+  { name: "nightList", icon: "🌙" },
   { name: "rainyList", icon: "☔️" },
-  { name: "winterSnowList", icon: "❄️" },
+  { name: "sunnyDayList", icon: "☀️" },
+  { name: "personalList", icon: "💙" },
   { name: "njrmxList", icon: "🐰" },
 ];

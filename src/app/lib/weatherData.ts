@@ -12,10 +12,13 @@ export async function fetchCurrentWeather(
   lon: string = "126.9782914"
 ) {
   noStore();
+
   try {
     const currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`;
 
     const { data } = await axios.get(currentWeatherApi);
+    const sleepTime = Date.now() + 1500;
+    while (Date.now() < sleepTime) {}
     return data;
   } catch (error) {
     console.error("Error:", error);

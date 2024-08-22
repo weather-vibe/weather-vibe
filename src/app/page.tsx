@@ -9,13 +9,20 @@ export default function Home({
 }: {
   searchParams?: { lat?: string; lon?: string };
 }) {
-  return (
-    <div className="px-10">
-      <div className="flex flex-col items-center lg:flex-row lg:justify-between lg:items-start">
-        <WeatherInfo searchParams={searchParams}></WeatherInfo>
-        <SearchBar></SearchBar>
-      </div>
-      <YtPlayer></YtPlayer>
+  const loading = (
+    <div className="w-full h-full bg-black flex items-center justify-center text-white text-lg">
+      Loading...
     </div>
+  );
+  return (
+    <Suspense fallback={loading}>
+      <div className="px-10">
+        <div className="flex flex-col items-center lg:flex-row lg:justify-between lg:items-start">
+          <WeatherInfo searchParams={searchParams}></WeatherInfo>
+          <SearchBar></SearchBar>
+        </div>
+        <YtPlayer></YtPlayer>
+      </div>
+    </Suspense>
   );
 }

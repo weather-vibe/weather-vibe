@@ -13,6 +13,15 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      animation: {
+        "move-up": "moveUp 40s linear infinite",
+      },
+      keyframes: {
+        moveUp: {
+          "0%": { backgroundPosition: "0 0" },
+          "100%": { backgroundPosition: "0 200px" },
+        },
+      },
     },
     screens: {
       lg: "800px",
